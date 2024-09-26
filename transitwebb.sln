@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{13B669BE-BB05-4DDF-9536-439F39A36129}") = "transitwebb", "transitwebb.phpproj", "{37E5CDC2-8547-48CB-913F-5AAA1314D0DB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37E5CDC2-8547-48CB-913F-5AAA1314D0DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37E5CDC2-8547-48CB-913F-5AAA1314D0DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37E5CDC2-8547-48CB-913F-5AAA1314D0DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37E5CDC2-8547-48CB-913F-5AAA1314D0DB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B893CCE-5963-4AC6-AF7B-E39A1B75A5FC}
+	EndGlobalSection
+EndGlobal
