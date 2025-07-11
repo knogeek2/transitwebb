@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>G.E.T. – Gig Evaluation Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            max-width: 600px;
+            margin: 2em auto;
+            padding: 1em;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 1em;
+        }
+
+        label {
+            display: block;
+            margin-top: 1em;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.5em;
+            margin-top: 0.3em;
+            box-sizing: border-box;
+        }
+
+        #results {
+            margin-top: 2em;
+            padding: 1em;
+            background: #e9ecef;
+            border-radius: 6px;
+        }
+
+        .recommendation {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 0.5em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Gig Evaluation Tool (G.E.T.)</h1>
+
+    <!-- Tab Navigation -->
+    <div class="tab-container">
+        <button class="tab" onclick="showTab('evaluate')">Evaluate Gig</button>
+        <button class="tab" onclick="showTab('log')">Log Completed Gig</button>
+        <button class="tab" onclick="showTab('report')">Reports</button>
+    </div>
+
+    <!-- Tab Contents -->
+    <div id="evaluate" class="tab-content">
+        <!-- Existing evaluation form goes here -->
+    </div>
+
+    <div id="log" class="tab-content" style="display:none;">
+        <!-- Logging form goes here -->
+    </div>
+
+    <div id="report" class="tab-content" style="display:none;">
+        <!-- Reporting layout goes here -->
+    </div>
+
+    <label for="grossPay">Gross Pay ($)</label>
+    <input type="number" id="grossPay" step="0.01">
+
+    <label for="outboundMiles">Outbound Miles</label>
+    <input type="number" id="outboundMiles" step="0.1">
+
+    <label for="returnMiles">Return Trip Miles</label>
+    <input type="number" id="returnMiles" step="0.1">
+
+    <label for="mileageCost">Mileage Cost ($/mile)</label>
+    <input type="number" id="mileageCost" value="0.67" step="0.01">
+
+    <label for="setAside">Fixed Vehicle Set-Aside ($)</label>
+    <input type="number" id="setAside" value="5.00" step="0.01">
+
+    <label for="hours">Estimated Duration (hours)</label>
+    <input type="number" id="hours" step="0.1">
+
+    <label for="hourlyRate">Your Time Value ($/hr)</label>
+    <input type="number" id="hourlyRate" value="20.00" step="0.01">
+
+    <div id="results">
+        <div><strong>Estimated Net Profit:</strong> <span id="netProfit">$0.00</span></div>
+        <div class="recommendation" id="recommendation"></div>
+    </div>
+
+    <button id="downloadArchiveBtn">Download Archived Gigs</button>
+
+    <script>
+        const inputs = document.querySelectorAll("input");
+        const netProfitOutput = document.getElementById("netProfit");
+        const recommendationOutput = document.getElementById("recommendation");
+
+        inputs.forEach(input => {
+            input.addEventListener("input", calculateProfit);
+        });
+
+        function calculateProfit() {
+            const grossPay = parseFloat(document.getElementById("grossPay").value) || 0;
+            const outboundMiles = parseFloat(document.getElementById("outboundMiles").value) || 0;
+            const returnMiles = parseFloat(document.getElementById("returnMiles").value) || 0;
+            const mileageCost = parseFloat(document.getElementById("mileageCost").value) || 0;
+            const setAside = parseFloat(document.getElementById("setAside").value) || 0;
+            const hours = parseFloat(document.getElementById("hours").value) || 0;
+            const hourlyRate = parseFloat(document.getElementById("hourlyRate").value) || 0;
+
+            const totalMileageCost = (outboundMiles + returnMiles) * mileageCost;
+            const timeCost = hours * hourlyRate;
+
+            const netProfit = grossPay - totalMileageCost - setAside - timeCost;
+
+            netProfitOutput.textContent = `$${netProfit.toFixed(2)}`;
+            recommendationOutput.textContent = netProfit >= 0 ? "✅ Proceed with offer." : "❌ Decline – unprofitable.";
+            recommendationOutput.style.color = netProfit >= 0 ? "green" : "red";
+        }
+        document.getElementById("downloadArchiveBtn").addEventListener("click", () => {
+            if (!acceptedGigs || acceptedGigs.length <= 100) {
+                alert("No gigs to archive yet.");
+                return;
+            }
+
+            const archivedRaw = acceptedGigs.slice(0, acceptedGigs.length - 100);
+            const archivedProcessed = archivedRaw.map(gig => {
+                const totalPay = gig.AmountDue + gig.Tip;
+                const payPerMile = totalPay / gig.PaidMiles;
+                const shiftDay = new Date(gig.ShiftDate).toLocaleDateString('en-US', { weekday: 'long' });
+
+                return {
+                    ...gig,
+                    TotalPay: parseFloat(totalPay.toFixed(2)),
+                    PayPerMile: parseFloat(payPerMile.toFixed(2)),
+                    HasTip: gig.Tip > 0,
+                    DayOfWeek: shiftDay
+                };
+            });
+
+            const archiveBlob = new Blob([JSON.stringify(archivedProcessed, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(archiveBlob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "archived-gigs.json";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        });
+
+    </script>
+
+</body>
+</html>

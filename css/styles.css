@@ -1,52 +1,66 @@
-﻿/*Default body text formatting*/
-body {
-    margin: 0;
-    position: relative;
+﻿/* Tab container and buttons */
+.tab-container {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0;
+}
+
+.tab {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s ease;
+}
+
+    .tab:hover {
+        background-color: #e0e0e0;
+    }
+
+    /* Active tab style (can be toggled via JS if needed) */
+    .tab.active {
+        background-color: #d0d0d0;
+        border-bottom: 2px solid #333;
+        font-weight: bold;
+    }
+
+/* Tab content sections */
+.tab-content {
+    margin-top: 10px;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+}
+
+/* Form field consistency */
+label {
+    display: block;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+button {
     width: 100%;
-    font-size: 16px;
-    font-weight: normal;
-    line-height: 1.25em;
-    text-align: left;
+    max-width: 300px;
+    padding: 6px;
+    margin-top: 4px;
+    font-size: 0.95rem;
+    box-sizing: border-box;
 }
 
-bckgrndimg, .bckgrndimg {
-    background-repeat: no-repeat;
-    background-size: contain;
-    max-width: 90%;
-    height: auto;
+button {
+    background-color: #006699;
+    color: white;
+    border: none;
+    margin-top: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/*Headings formats*/
-h1, h2, .h1, .h2, h3, .h3 {
-    margin-bottom: 0.5rem;
-    font-family: inherit;
-}
-
-h1, .h1 {
-    font-size: 2.5rem;
-    font-weight:bold;
-    text-align: center;
-}
-
-h2, .h2 {
-    font-size: 2rem;
-    text-align: center;
-}
-
-h3, .h3 {
-    font-size: 1.75rem;
-    text-align: center;
-}
-
-/* Default HTML settings */
-html {
-    font-family:sans-serif;
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    -ms-overflow-style: scrollbar;
-    -webkit-tap-highlight-color: transparent;
-}
-
-p, div.paragraph {
-    line-height: 1.8em;
-}
+    button:hover {
+        background-color: #004d80;
+    }
