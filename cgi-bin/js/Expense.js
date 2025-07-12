@@ -1,4 +1,4 @@
-class expense {
+export class Expense {
     constructor(description, amount, hasReceipt = false, gigId = "", stamp = new Date()) {
         this.description = description;
         this.amount = amount;

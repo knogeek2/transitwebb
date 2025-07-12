@@ -1,18 +1,11 @@
-﻿/*
-    Gig Module
-    Author: Alan Webb
-    License: MIT
-    Created: July 2025
-    Description: Represents a single gig entry in G.E.T. with profit evaluation logic.
-*/
-
+﻿// gig.js
 export class Gig {
-    constructor(id, paidMiles, driverEarnings, tip = 0, notes = "", approachMiles = 0) {
-        this.id = id;
-        this.paidMiles = paidMiles;
+    constructor({ gigId, provider, driverEarnings = 0, tip = 0, paidMiles = 0, approachMiles = 0 }) {
+        this.gigId = gigId;
+        this.provider = provider;
         this.driverEarnings = driverEarnings;
         this.tip = tip;
-        this.notes = notes;
+        this.paidMiles = paidMiles;
         this.approachMiles = approachMiles;
     }
 
@@ -26,9 +19,5 @@ export class Gig {
 
     get payPerMile() {
         return this.totalMiles > 0 ? this.totalPay / this.totalMiles : 0;
-    }
-
-    get isProfitable() {
-        return this.payPerMile >= 0.75; // Threshold could be externalized later
     }
 }

@@ -47,6 +47,14 @@ export class KeyManager {
         return finalId;
     }
 
+    sanitizeTimestamp(dateObj) {
+        return dateObj.toISOString().replace(/[:.]/g, '-');
+    }
+
+    hasKey(key) {
+        return this.existingKeys.has(key);
+    }
+
     addKey(key) {
         this.existingKeys.add(key);
     }

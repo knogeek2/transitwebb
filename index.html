@@ -1,30 +1,77 @@
-﻿<!-- Top level page for transitwebb.com. Maintained by Alan Webb, knogeek2@gmail.com Copyright 2024, Baugh Holding Company, All Rights Reserved. -->
-<!DOCTYPE html>
-<html lang="en-us" charset="utf-8">
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>G.E.T. – Gig Evaluation Tool</title>
+</head>
+<body>
 
-    <!--Heading-->
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <h1>Gig Evaluation Tool (G.E.T.)</h1>
 
-        <!--Internal styles. -->
-        <link rel="stylesheet" href="css/styles.css" />
+    <div class="tab-container">
+        <button class="tab" onclick="showTab('evaluate')">Evaluate Gig</button>
+        <button class="tab" onclick="showTab('log')">Log Completed Gig</button>
+        <button class="tab" onclick="showTab('report')">Reports</button>
+    </div>
 
-        <!--Title-->
-        <title>Transit Webb</title>
-    </head>
+    <div id="confirmationMessage" style="display:none; color:green; margin-top:1em; font-weight:bold;"></div>
 
-    <!--Body-->
-    <body>
-        <div class="container-fluid">
-            <div class="background">
-                <a href="https://rvabhc.com" target="_blank"><img alt="Baugh Holding Company" src="images/bhclogo.jpg" style="width:64px; height:auto; float:left" /></a>
-                <h2>Transit Webb</h2>
-                <h3>The end of an era. </h3>
-                <p>I drove a cab in the SF Bay Area for 15 years or so. Then I met my son's Mom, we married, became pregnant and learned that cab driving would not support us. So I shifted to clerical work and later, software development using the Microsoft Office suite. For the next twenty years or so I had a career in Tech Support. That ended in 2018. Crap. So . . . back to driving people for dollars. I did that until this spring (April 2023). Now that's done. <a href="rvabhc.com">Baugh Holding Company</a> will continue. Doing what? We shall see.</p>
-                <audio autoplay controls>
-                    <source src="./media/ineedacab.wav" />
-                </audio>
+    <section id="gig-eval-form">
+        <h3>Evaluate Gig</h3>
+        <div class="form-table">
+
+            <div class="form-row">
+                <div class="form-label">Gig ID:</div>
+                <div class="form-input"><input type="text" id="gigId" /></div>
             </div>
+
+            <div class="form-row">
+                <div class="form-label">Customer:</div>
+                <div class="form-input">
+                    <input type="text" id="customer" list="customerList" />
+                    <datalist id="customerList"></datalist>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-label">Driver Earnings:</div>
+                <div class="form-input"><input type="number" id="driverEarnings" step="0.01" /></div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-label">Tip:</div>
+                <div class="form-input"><input type="number" id="tip" step="0.01" /></div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-label">Miles to Pickup:</div>
+                <div class="form-input"><input type="number" id="approachMiles" step="0.1" /></div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-label">Paid Miles:</div>
+                <div class="form-input"><input type="number" id="paidMiles" step="0.1" /></div>
+            </div>
+
         </div>
-    </body>
+
+        <div id="gigEvaluation"></div>
+
+        <div class="form-actions">
+            <button id="postGigBtn" disabled>Post Gig</button>
+        </div>
+    </section>
+
+    <div id="log" class="tab-content" style="display:none;">
+        <!-- Logging form goes here -->
+    </div>
+
+    <div id="report" class="tab-content" style="display:none;">
+        <!-- Reporting layout goes here -->
+    </div>
+
+    <script type="module" src="get.js" ></script>
+
+</body>
 </html>
