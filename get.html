@@ -50,16 +50,48 @@
 
     <h1>Gig Evaluation Tool (G.E.T.)</h1>
 
-    <!-- Tab Navigation -->
     <div class="tab-container">
         <button class="tab" onclick="showTab('evaluate')">Evaluate Gig</button>
         <button class="tab" onclick="showTab('log')">Log Completed Gig</button>
         <button class="tab" onclick="showTab('report')">Reports</button>
     </div>
 
-    <!-- Tab Contents -->
+    <div id="confirmationMessage" style="display:none; color:green; margin-top:1em; font-weight:bold;"></div>
+
     <div id="evaluate" class="tab-content">
-        <!-- Existing evaluation form goes here -->
+        <!-- Evaluation Form -->
+        <label for="grossPay">Gross Pay ($)</label>
+        <input type="number" id="grossPay" step="0.01">
+
+        <label for="outboundMiles">Outbound Miles</label>
+        <input type="number" id="outboundMiles" step="0.1">
+
+        <label for="returnMiles">Return Trip Miles</label>
+        <input type="number" id="returnMiles" step="0.1">
+
+        <label for="milesToHome">Distance to Home (miles)</label>
+        <input type="number" id="milesToHome" step="0.1">
+
+        <label for="pickupTime">Pickup Time</label>
+        <input type="time" id="pickupTime">
+
+        <label for="mileageCost">Mileage Cost ($/mile)</label>
+        <input type="number" id="mileageCost" value="0.67" step="0.01">
+
+        <label for="setAside">Fixed Vehicle Set-Aside ($)</label>
+        <input type="number" id="setAside" value="5.00" step="0.01">
+
+        <label for="hours">Estimated Duration (hours)</label>
+        <input type="number" id="hours" step="0.1">
+
+        <label for="hourlyRate">Your Time Value ($/hr)</label>
+        <input type="number" id="hourlyRate" value="20.00" step="0.01">
+
+        <div id="results">
+            <div><strong>Estimated Net Profit:</strong> <span id="netProfit">$0.00</span></div>
+            <div><strong>Paid Mile Ratio:</strong> <span id="paidRatio">0%</span></div>
+            <div class="recommendation" id="recommendation"></div>
+        </div>
     </div>
 
     <div id="log" class="tab-content" style="display:none;">
@@ -70,38 +102,13 @@
         <!-- Reporting layout goes here -->
     </div>
 
-    <label for="grossPay">Gross Pay ($)</label>
-    <input type="number" id="grossPay" step="0.01">
-
-    <label for="outboundMiles">Outbound Miles</label>
-    <input type="number" id="outboundMiles" step="0.1">
-
-    <label for="returnMiles">Return Trip Miles</label>
-    <input type="number" id="returnMiles" step="0.1">
-
-    <label for="mileageCost">Mileage Cost ($/mile)</label>
-    <input type="number" id="mileageCost" value="0.67" step="0.01">
-
-    <label for="setAside">Fixed Vehicle Set-Aside ($)</label>
-    <input type="number" id="setAside" value="5.00" step="0.01">
-
-    <label for="hours">Estimated Duration (hours)</label>
-    <input type="number" id="hours" step="0.1">
-
-    <label for="hourlyRate">Your Time Value ($/hr)</label>
-    <input type="number" id="hourlyRate" value="20.00" step="0.01">
-
-    <div id="results">
-        <div><strong>Estimated Net Profit:</strong> <span id="netProfit">$0.00</span></div>
-        <div class="recommendation" id="recommendation"></div>
-    </div>
-
     <button id="downloadArchiveBtn">Download Archived Gigs</button>
 
     <script>
         const inputs = document.querySelectorAll("input");
         const netProfitOutput = document.getElementById("netProfit");
         const recommendationOutput = document.getElementById("recommendation");
+        const paidRatioOutput = document.getElementById("paidRatio");
 
         inputs.forEach(input => {
             input.addEventListener("input", calculateProfit);
@@ -118,13 +125,20 @@
 
             const totalMileageCost = (outboundMiles + returnMiles) * mileageCost;
             const timeCost = hours * hourlyRate;
-
             const netProfit = grossPay - totalMileageCost - setAside - timeCost;
 
             netProfitOutput.textContent = `$${netProfit.toFixed(2)}`;
             recommendationOutput.textContent = netProfit >= 0 ? "✅ Proceed with offer." : "❌ Decline – unprofitable.";
             recommendationOutput.style.color = netProfit >= 0 ? "green" : "red";
+
+            const totalMiles = outboundMiles + returnMiles;
+            const paidRatio = totalMiles > 0 ? outboundMiles / totalMiles : 0;
+            paidRatioOutput.textContent = `${(paidRatio * 100).toFixed(1)}%`;
+            paidRatioOutput.style.color =
+                paidRatio > 0.5 ? "green" :
+                    paidRatio >= 0.33 ? "orange" : "red";
         }
+
         document.getElementById("downloadArchiveBtn").addEventListener("click", () => {
             if (!acceptedGigs || acceptedGigs.length <= 100) {
                 alert("No gigs to archive yet.");
@@ -157,6 +171,60 @@
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
         });
+
+        function showTab(tabName) {
+            document.querySelectorAll(".tab-content").forEach(el => el.style.display = "none");
+            document.getElementById(tabName).style.display = "block";
+        }
+
+        document.getElementById("logGigBtn").addEventListener("click", () => {
+            // Simulated gig logging logic (can be enhanced later)
+            // e.g., pushing gig data into acceptedGigs array or localStorage
+
+            // Show confirmation message
+            document.getElementById("confirmationMessage").textContent = "✅ Gig completed and logged successfully.";
+            document.getElementById("confirmationMessage").style.display = "block";
+            setTimeout(() => {
+                document.getElementById("confirmationMessage").style.display = "none";
+            }, 4000);
+        });
+
+        function generateDateDimension(startYear = 2020, endYear = 2030) {
+            const dateDimension = [];
+            const startDate = new Date(`${startYear}-01-01`);
+            const endDate = new Date(`${endYear}-12-31`);
+
+            for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+                const shiftDate = d.toISOString().split('T')[0];
+                const dayOfWeek = d.toLocaleDateString('en-US', { weekday: 'long' });
+                const weekNo = getWeekNumber(new Date(d));
+                const endOfWeek = getEndOfWeek(new Date(d));
+                const endOfPeriod = getLastDayOfMonth(new Date(d));
+                const payday = getLastFridayOfMonth(new Date(d));
+                const roadieTuesday = getTuesdayOfWeek(new Date(d));
+                const monthNo = d.getMonth() + 1;
+                const monthText = d.toLocaleDateString('en-US', { month: 'long' });
+                const quarter = `${d.getFullYear()}Q${Math.ceil(monthNo / 3)}`;
+                const year = d.getFullYear();
+
+                dateDimension.push({
+                    shiftDate,
+                    dayOfWeek,
+                    weekNo,
+                    endOfWeek,
+                    endOfPeriod,
+                    payday,
+                    roadieTuesday,
+                    monthNo,
+                    monthText,
+                    quarter,
+                    year
+                });
+            }
+
+            localStorage.setItem("DateDimension", JSON.stringify(dateDimension));
+            console.log(`✅ DateDimension stored in localStorage (${dateDimension.length} days)`);
+        }
 
     </script>
 
