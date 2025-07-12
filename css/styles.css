@@ -53,9 +53,8 @@ button {
 }
 
 button {
-    background-color: #006699;
-    color: white;
-    border: none;
+    border: thin;
+    font-weight: bold;
     margin-top: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -64,3 +63,128 @@ button {
     button:hover {
         background-color: #004d80;
     }
+/*Style Sheet for artsfirerva.com/index.html. Arts Fire RVA, a Baugh Holding Company Property. Maintained by Alan Webb me@knogeek.com */
+
+/*Default body text formatting*/
+body {
+    background-color: lightblue;
+    margin: auto;
+    position: relative;
+    width: 100%;
+    font-family: sans-serif;
+}
+
+/*Link format*/
+a {
+    color: black;
+    font-weight: inherit
+}
+
+    /*Link hover format*/
+    a:hover {
+        background-color: aliceblue;
+        font-weight: bold;
+    }
+
+/*Form styles*/
+.form-table {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+}
+
+.form-label {
+    width: 140px;
+    font-weight: bold;
+    text-align: right;
+    padding-right: 12px;
+}
+
+.form-input {
+    flex: 1;
+    max-width: 300px;
+}
+
+    .form-input input {
+        width: 100%;
+        padding: 6px;
+        font-size: 0.95rem;
+        box-sizing: border-box;
+    }
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+
+/*Headings formats*/
+h1, h2, h3, h4, h5,
+.h1, .h2, .h3, .h4, .h5 {
+    margin-bottom: 0.5rem;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+h1, .h1 {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+h2, .h2 {
+    background-color: lightgray;
+    font-size: 2rem;
+    text-align: center;
+}
+
+h3, .h3 {
+    font-size: 1.75rem;
+    text-align: center;
+}
+
+h4, .h4 {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+h5, .h5 {
+    font-size: 1.25rem;
+    text-align: center;
+}
+
+/*Image formats*/
+img {
+    border-style: none;
+    height: auto;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto; /* Centers images horizontally */
+}
+
+/* Table formatting */
+table {
+    width: 100%;
+    margin: 0 auto;
+}
+
+td {
+    text-align: center; /* Centers text horizontally */
+    vertical-align: middle; /* Centers content vertically */
+    padding: 10px; /* Adds some spacing */
+}
+
+.table a {
+    display: block; /* Makes links fill the cell */
+    text-decoration: none; /* Optional: removes underline from links */
+}
+
+.table img {
+    margin: 0 auto; /* Centers images within table cells */
+    width: 64px; /* Maintains your specified width */
+}

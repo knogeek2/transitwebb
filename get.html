@@ -1,50 +1,14 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+
+    <!--Internal styles. -->
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <!--Page Title-->
     <title>G.E.T. – Gig Evaluation Tool</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            max-width: 600px;
-            margin: 2em auto;
-            padding: 1em;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 1em;
-        }
-
-        label {
-            display: block;
-            margin-top: 1em;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.5em;
-            margin-top: 0.3em;
-            box-sizing: border-box;
-        }
-
-        #results {
-            margin-top: 2em;
-            padding: 1em;
-            background: #e9ecef;
-            border-radius: 6px;
-        }
-
-        .recommendation {
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-top: 0.5em;
-        }
-    </style>
 </head>
 <body>
 
@@ -58,41 +22,48 @@
 
     <div id="confirmationMessage" style="display:none; color:green; margin-top:1em; font-weight:bold;"></div>
 
-    <div id="evaluate" class="tab-content">
-        <!-- Evaluation Form -->
-        <label for="grossPay">Gross Pay ($)</label>
-        <input type="number" id="grossPay" step="0.01">
+    <section id="gig-eval-form">
+        <h3>Evaluate Gig</h3>
+        <div class="form-table">
 
-        <label for="outboundMiles">Outbound Miles</label>
-        <input type="number" id="outboundMiles" step="0.1">
+            <div class="form-row">
+                <div class="form-label">Gig ID:</div>
+                <div class="form-input"><input type="text" id="gigId" /></div>
+            </div>
 
-        <label for="returnMiles">Return Trip Miles</label>
-        <input type="number" id="returnMiles" step="0.1">
+            <div class="form-row">
+                <div class="form-label">Customer:</div>
+                <div class="form-input">
+                    <input type="text" id="customer" list="customerList" />
+                    <datalist id="customerList"></datalist>
+                </div>
+            </div>
 
-        <label for="milesToHome">Distance to Home (miles)</label>
-        <input type="number" id="milesToHome" step="0.1">
+            <div class="form-row">
+                <div class="form-label">Driver Earnings:</div>
+                <div class="form-input"><input type="number" id="driverEarnings" step="0.01" /></div>
+            </div>
 
-        <label for="pickupTime">Pickup Time</label>
-        <input type="time" id="pickupTime">
+            <div class="form-row">
+                <div class="form-label">Tip:</div>
+                <div class="form-input"><input type="number" id="tip" step="0.01" /></div>
+            </div>
 
-        <label for="mileageCost">Mileage Cost ($/mile)</label>
-        <input type="number" id="mileageCost" value="0.67" step="0.01">
+            <div class="form-row">
+                <div class="form-label">Miles to Pickup:</div>
+                <div class="form-input"><input type="number" id="approachMiles" step="0.1" /></div>
+            </div>
 
-        <label for="setAside">Fixed Vehicle Set-Aside ($)</label>
-        <input type="number" id="setAside" value="5.00" step="0.01">
+            <div class="form-row">
+                <div class="form-label">Paid Miles:</div>
+                <div class="form-input"><input type="number" id="paidMiles" step="0.1" /></div>
+            </div>
 
-        <label for="hours">Estimated Duration (hours)</label>
-        <input type="number" id="hours" step="0.1">
-
-        <label for="hourlyRate">Your Time Value ($/hr)</label>
-        <input type="number" id="hourlyRate" value="20.00" step="0.01">
-
-        <div id="results">
-            <div><strong>Estimated Net Profit:</strong> <span id="netProfit">$0.00</span></div>
-            <div><strong>Paid Mile Ratio:</strong> <span id="paidRatio">0%</span></div>
-            <div class="recommendation" id="recommendation"></div>
         </div>
-    </div>
+        <div class="form-actions">
+            <button type="submit">Add Gig</button>
+        </div>
+    </section>
 
     <div id="log" class="tab-content" style="display:none;">
         <!-- Logging form goes here -->
@@ -101,8 +72,6 @@
     <div id="report" class="tab-content" style="display:none;">
         <!-- Reporting layout goes here -->
     </div>
-
-    <button id="downloadArchiveBtn">Download Archived Gigs</button>
 
     <!--JavaScript for the app-->
     <script src="cgi-bin/js/classes.js"></script>
