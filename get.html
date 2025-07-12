@@ -2,13 +2,8 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
-
-    <!--Internal styles. -->
     <link rel="stylesheet" href="css/styles.css" />
-
-    <!--Page Title-->
     <title>G.E.T. – Gig Evaluation Tool</title>
-
 </head>
 <body>
 
@@ -59,9 +54,15 @@
                 <div class="form-input"><input type="number" id="paidMiles" step="0.1" /></div>
             </div>
 
+            <div class="form-row">
+                <div class="form-label">Profitability:</div>
+                <div class="form-input" id="gigEvaluation">💬 Waiting...</div>
+            </div>
+
         </div>
+
         <div class="form-actions">
-            <button type="submit">Add Gig</button>
+            <button id="postGigBtn" disabled>Post Gig</button>
         </div>
     </section>
 
@@ -73,10 +74,8 @@
         <!-- Reporting layout goes here -->
     </div>
 
-    <!--JavaScript for the app-->
     <script src="cgi-bin/js/classes.js"></script>
     <script src="cgi-bin/js/get.js"></script>
-
 
 </body>
 </html>
