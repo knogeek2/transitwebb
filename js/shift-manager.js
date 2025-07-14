@@ -1,5 +1,5 @@
 // shift-manager.js
-import { Shift } from './shift.js';
+import { Shift } from './js/shift.js';
 
 export class ShiftManager {
     constructor() {

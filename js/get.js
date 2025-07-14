@@ -1,5 +1,5 @@
 ﻿// get.js
-import { Gig } from './gig.js';
+import { Gig } from './js/gig.js';
 
 // Initialize the gig evaluation setup with any recent gigs if available
 import { setupGigEvaluation } from './gig-evaluator.js';

@@ -35,3 +35,4 @@ export class Shift {
         // Reflects actual financial burden after reimbursements
         return this.expenses.reduce((sum, e) => sum + e.trueCost, 0);
     }
+}
