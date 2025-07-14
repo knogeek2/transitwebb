@@ -1,31 +1,44 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Ensure proper scaling on mobile and define character set -->
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="utf-8">
+
+    <!-- Link to external CSS for styling -->
     <link rel="stylesheet" href="css/styles.css" />
+
+    <!-- Title shown in browser tab -->
     <title>G.E.T. – Gig Evaluation Tool</title>
 </head>
 <body>
 
+    <!-- Main header for the application -->
     <h1>Gig Evaluation Tool (G.E.T.)</h1>
 
+    <!-- Tab navigation for switching views -->
     <div class="tab-container">
         <button class="tab" onclick="showTab('evaluate')">Evaluate Gig</button>
         <button class="tab" onclick="showTab('log')">Log Completed Gig</button>
         <button class="tab" onclick="showTab('report')">Reports</button>
     </div>
 
+    <!-- Area to display confirmation messages (e.g. after posting a gig) -->
     <div id="confirmationMessage" style="display:none; color:green; margin-top:1em; font-weight:bold;"></div>
 
+    <!-- Gig Evaluation form section -->
     <section id="gig-eval-form">
         <h3>Evaluate Gig</h3>
+
+        <!-- Grid-style layout for input fields -->
         <div class="form-table">
 
+            <!-- Unique gig identifier -->
             <div class="form-row">
                 <div class="form-label">Gig ID:</div>
                 <div class="form-input"><input type="text" id="gigId" /></div>
             </div>
 
+            <!-- Customer name with auto-suggestion from datalist -->
             <div class="form-row">
                 <div class="form-label">Customer:</div>
                 <div class="form-input">
@@ -34,44 +47,41 @@
                 </div>
             </div>
 
+            <!-- Earnings provided by the platform -->
             <div class="form-row">
                 <div class="form-label">Driver Earnings:</div>
                 <div class="form-input"><input type="number" id="driverEarnings" step="0.01" /></div>
             </div>
 
+            <!-- Optional customer gratuity -->
             <div class="form-row">
                 <div class="form-label">Tip:</div>
                 <div class="form-input"><input type="number" id="tip" step="0.01" /></div>
             </div>
 
+            <!-- Distance driven to reach customer before delivery begins -->
             <div class="form-row">
                 <div class="form-label">Miles to Pickup:</div>
                 <div class="form-input"><input type="number" id="approachMiles" step="0.1" /></div>
             </div>
 
+            <!-- Distance covered during paid delivery -->
             <div class="form-row">
                 <div class="form-label">Paid Miles:</div>
                 <div class="form-input"><input type="number" id="paidMiles" step="0.1" /></div>
             </div>
 
+            <!-- Trigger gig evaluation logic -->
+            <div class="form-actions">
+                <button id="evaluateBtn">Evaluate</button>
+            </div>
+
         </div>
 
+        <!-- Output of gig evaluation (e.g. $/mile calculation or validation messages) -->
         <div id="gigEvaluation"></div>
 
-        <div class="form-actions">
-            <button id="postGigBtn" disabled>Post Gig</button>
-        </div>
-    </section>
-
-    <div id="log" class="tab-content" style="display:none;">
-        <!-- Logging form goes here -->
-    </div>
-
-    <div id="report" class="tab-content" style="display:none;">
-        <!-- Reporting layout goes here -->
-    </div>
-
-    <script type="module" src="./js/get.js"></script>
-
-</body>
+        <!-- Button to post -->
+        </section>
+    </body>
 </html>

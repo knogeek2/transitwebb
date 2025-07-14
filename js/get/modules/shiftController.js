@@ -1,4 +1,6 @@
-﻿export class ShiftController {
+﻿import { addToHistory, compareToHistory } from './history.js';
+
+export class ShiftController {
     constructor(shiftDate, odometerStart = 0) {
         this.shiftDate = shiftDate;
         this.odometerStart = odometerStart;
@@ -6,9 +8,15 @@
         this.gigs = [];
     }
 
+
     addGig(gig) {
         this.gigs.push(gig);
+        addToHistory(gig);               // Track gig in recent history
         this.updateShiftMetrics();
+
+        const verdict = compareToHistory(gig, recentGigs);  // Optional live feedback
+        document.getElementById("gigEvaluation").textContent =
+            `Paid Miles: ${verdict.currentRate} vs Hist Avg: ${verdict.historyRate} → ${verdict.thumbs}`;
     }
 
     setOdometerEnd(value) {

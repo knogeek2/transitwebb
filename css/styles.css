@@ -1,9 +1,60 @@
-﻿/* Tab container and buttons */
+﻿/* 
+  G.E.T. UI Stylesheet
+  Maintained by Alan Webb
+  Applies layout and styling for gig evaluation workflows
+*/
+
+/* ------------------------
+   Typography & Layout Base
+--------------------------- */
+
+body {
+    background-color: lightblue;
+    margin: auto;
+    width: 100%;
+    font-family: sans-serif;
+}
+
+h1, h2, h3, h4, h5 {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    font-family: inherit;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+    background-color: lightgray;
+}
+
+h3 {
+    font-size: 1.75rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.25rem;
+}
+
+/* ------------------------
+   Tab Navigation
+--------------------------- */
+
 .tab-container {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     gap: 8px;
-    margin: 20px 0;
+    margin: 20px auto;
+    max-width: 800px;
 }
 
 .tab {
@@ -19,172 +70,136 @@
         background-color: #e0e0e0;
     }
 
-    /* Active tab style (can be toggled via JS if needed) */
     .tab.active {
         background-color: #d0d0d0;
         border-bottom: 2px solid #333;
         font-weight: bold;
     }
 
-/* Tab content sections */
+/* ------------------------
+   Tab Content Section
+--------------------------- */
+
 .tab-content {
     margin-top: 10px;
     padding: 10px;
     border-top: 1px solid #ccc;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-/* Form field consistency */
-label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
+/* ------------------------
+   Form Grid Layout
+--------------------------- */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 16px;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 12px;
 }
+
+label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* ------------------------
+   Input and Button Styling
+--------------------------- */
 
 input[type="text"],
 input[type="number"],
-input[type="date"],
-button {
+input[type="date"] {
     width: 100%;
     max-width: 300px;
     padding: 6px;
-    margin-top: 4px;
     font-size: 0.95rem;
     box-sizing: border-box;
 }
 
 button {
-    border: thin;
-    font-weight: bold;
+    width: 100%;
+    max-width: 300px;
+    padding: 6px;
     margin-top: 16px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    border: thin;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-sizing: border-box;
 }
 
     button:hover {
         background-color: #004d80;
     }
-/*Style Sheet for artsfirerva.com/index.html. Arts Fire RVA, a Baugh Holding Company Property. Maintained by Alan Webb me@knogeek.com */
 
-/*Default body text formatting*/
-body {
-    background-color: lightblue;
-    margin: auto;
-    position: relative;
-    width: 100%;
-    font-family: sans-serif;
-}
+/* ------------------------
+   Responsive Button Row
+--------------------------- */
 
-/*Link format*/
-a {
-    color: black;
-    font-weight: inherit
-}
-
-    /*Link hover format*/
-    a:hover {
-        background-color: aliceblue;
-        font-weight: bold;
-    }
-
-/*Form styles*/
-.form-table {
-    display: flex;
-    flex-direction: column;
+.button-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 12px;
+    justify-content: center;
+    margin-top: 24px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.form-row {
-    display: flex;
-    align-items: center;
-}
+/* ------------------------
+   Responsive Behavior
+--------------------------- */
 
-.form-label {
-    width: 140px;
-    font-weight: bold;
-    text-align: right;
-    padding-right: 12px;
-}
-
-.form-input {
-    flex: 1;
-    max-width: 300px;
-}
-
-    .form-input input {
-        width: 100%;
-        padding: 6px;
-        font-size: 0.95rem;
-        box-sizing: border-box;
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
     }
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 16px;
+
+    .button-row {
+        grid-template-columns: 1fr;
+    }
+
+    .tab-container {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
+/* ------------------------
+   Misc Utility Styles
+--------------------------- */
 
-/*Headings formats*/
-h1, h2, h3, h4, h5,
-.h1, .h2, .h3, .h4, .h5 {
-    margin-bottom: 0.5rem;
-    font-family: inherit;
-    font-weight: 500;
-    line-height: 1.2;
-}
-
-h1, .h1 {
-    font-size: 2.5rem;
-    text-align: center;
-}
-
-h2, .h2 {
-    background-color: lightgray;
-    font-size: 2rem;
-    text-align: center;
-}
-
-h3, .h3 {
-    font-size: 1.75rem;
-    text-align: center;
-}
-
-h4, .h4 {
-    font-size: 1.5rem;
-    text-align: center;
-}
-
-h5, .h5 {
-    font-size: 1.25rem;
-    text-align: center;
-}
-
-/*Image formats*/
 img {
-    border-style: none;
-    height: auto;
-    max-width: 100%;
     display: block;
-    margin: 0 auto; /* Centers images horizontally */
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border-style: none;
 }
 
-/* Table formatting */
 table {
     width: 100%;
     margin: 0 auto;
 }
 
 td {
-    text-align: center; /* Centers text horizontally */
-    vertical-align: middle; /* Centers content vertically */
-    padding: 10px; /* Adds some spacing */
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
 }
 
-.table a {
-    display: block; /* Makes links fill the cell */
-    text-decoration: none; /* Optional: removes underline from links */
+a {
+    color: black;
+    text-decoration: none;
 }
 
-.table img {
-    margin: 0 auto; /* Centers images within table cells */
-    width: 64px; /* Maintains your specified width */
-}
+    a:hover {
+        background-color: aliceblue;
+        font-weight: bold;
+    }
