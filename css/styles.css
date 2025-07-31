@@ -203,3 +203,11 @@ a {
         background-color: aliceblue;
         font-weight: bold;
     }
+
+input[readonly] {
+    background-color: #e6e6e6;
+    color: #333;
+    border: 1px dashed #888;
+    cursor: default;
+}
+

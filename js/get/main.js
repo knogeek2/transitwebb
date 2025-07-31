@@ -1,54 +1,45 @@
-﻿// Import the input validation function from a dedicated module.
-// Ensures all gig evaluation inputs meet expected criteria before processing.
-import { validateGigInputs } from './js/validate.js';
+﻿// main.js — Command Center for UI interaction and module delegation
 
-/**
- * Evaluates gig data by calculating total earnings and mileage efficiency.
- * Assumes input fields contain valid, pre-checked numbers.
- * Displays result in the gigEvaluation UI element.
- */
-export function evaluateGig() {
-    // Parse numeric values from form fields.
-    const earnings = parseFloat(document.getElementById("driverEarnings").value);
-    const tip = parseFloat(document.getElementById("tip").value);
-    const approachMiles = parseFloat(document.getElementById("approachMiles").value);
-    const paidMiles = parseFloat(document.getElementById("paidMiles").value);
+// 🚚 Import functions from dedicated modules
+import { showTab, resetForm } from './uiController.js';          // Manages UI state and tab visibility
+import { collectGigData } from './dataCollector.js';            // Gathers form inputs into a usable object
+import { validateGigInputs } from './validate.js';              // Ensures inputs meet business logic rules
+import { evaluateGig } from './gigEvaluator.js';                // Performs profitability scoring and feedback
+import { logGig } from './gigLogger.js';                        // Records gig data for history or analysis
 
-    // Basic fallback validation in case raw data somehow bypassed validateGigInputs().
-    if (
-        isNaN(earnings) ||
-        isNaN(tip) ||
-        isNaN(approachMiles) ||
-        isNaN(paidMiles)
-    ) {
-        document.getElementById("gigEvaluation").textContent =
-            "Please fill out all fields with numbers.";
-        return;
-    }
+// 🛫 Setup on page load
+document.addEventListener('DOMContentLoaded', () => {
+    initializeEventHandlers();       // Hook up all UI buttons/tabs
+    showTab('evaluate');             // Default tab when app opens
+});
 
-    // Compute totals and efficiency metrics.
-    const totalMiles = approachMiles + paidMiles;
-    const totalEarnings = earnings + tip;
-    const ratePerMile = totalEarnings / totalMiles;
+// 🎛️ Sets up button/tab event listeners to route user actions
+function initializeEventHandlers() {
+    // 🔁 Tab navigation buttons
+    document.getElementById('evaluateTabBtn').addEventListener('click', () => showTab('evaluate'));
+    document.getElementById('logTabBtn').addEventListener('click', () => showTab('log'));
+    document.getElementById('settingsTabBtn').addEventListener('click', () => showTab('settings'));
 
-    // Update the interface with the calculated value.
-    document.getElementById("gigEvaluation").textContent =
-        `You earned $${ratePerMile.toFixed(2)} per mile.`;
+    // 🎯 Action buttons
+    document.getElementById('evaluateButton').addEventListener('click', handleEvaluation);  // Triggers gig scoring
+    document.getElementById('logButton').addEventListener('click', handleLogging);          // Saves gig data
+    document.getElementById('resetButton').addEventListener('click', resetForm);            // Clears UI form
 }
 
-/**
- * Attach click listener to the Evaluate button.
- * Runs validation first; only proceeds with gig evaluation if inputs pass.
- */
-document.getElementById("evaluateBtn").addEventListener("click", () => {
-    const errors = validateGigInputs(); // Run modular input checks.
+// 🧠 Evaluation handler: routes gig input to validation + evaluation modules
+function handleEvaluation() {
+    const gigData = collectGigData();                   // Parses form inputs into structured data
+    const isValid = validateGigInputs(gigData);         // Checks for input errors, constraints, empty fields
 
-    if (errors.length > 0) {
-        // Display formatted list of errors to guide the user.
-        document.getElementById("gigEvaluation").textContent = errors.join("\n");
-        return;
+    if (!isValid) {
+        return; // Validation module shows error messages directly
     }
 
-    // Inputs are clean—run the calculation and update display.
-    evaluateGig();
-});
+    evaluateGig(gigData);                               // Routes validated data into scoring logic
+}
+
+// 🗃️ Logging handler: records a gig (future use for history or stats)
+function handleLogging() {
+    const gigData = collectGigData();                   // Re-uses same form parser
+    logGig(gigData);                                    // Sends gig object to logging system
+}

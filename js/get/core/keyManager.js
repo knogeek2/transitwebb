@@ -62,16 +62,20 @@ export class KeyManager {
         const stampBase = new Date();
         stampBase.setMilliseconds(stampBase.getMilliseconds() + attempt * 100); // Offset for retries
 
-        const stamp = stampBase.toISOString().replace(/[:.]/g, '-');
-        const baseId = gigId ? `${gigId}-${stamp}` : `${shiftDate}-${stamp}`;
+        let stamp = stampBase.toISOString().replace(/[:.]/g, '-');
+        let finalId = gigId ? `${gigId}-${stamp}` : `${shiftDate}-${stamp}`;
+        let count = attempt;
 
         // Collision mitigation loop
-        let finalId = baseId;
-        let count = attempt;
         while (this.existingKeys.has(finalId) && count < 10) {
             count++;
             stampBase.setMilliseconds(stampBase.getMilliseconds() + 100); // Nudge timestamp
-            const retryStamp
+            stamp = stampBase.toISOString().replace(/[:.]/g, '-'); // Correct assignment
+            finalId = gigId ? `${gigId}-${stamp}` : `${shiftDate}-${stamp}`;
         }
+
+        // Register the final key to avoid reuse
+        this.existingKeys.add(finalId);
+        return finalId;
     }
 }

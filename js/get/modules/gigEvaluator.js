@@ -1,11 +1,11 @@
-﻿// gig-evaluator.js
+﻿// gigEvaluator.js
 
 export function setupGigEvaluation(recentGigs = []) {
     const newGig = {
-        paidMiles: 0,
-        approachMiles: 0,
-        get totalMiles() {
-            return this.paidMiles + this.approachMiles;
+        gigMiles: 0,
+        shiftMiles: 0, // Optional if you want to reflect shift-level stats
+        get mileEfficiency() {
+            return this.gigMiles > 0 ? (this.shiftMiles / this.gigMiles) : 0;
         }
     };
 
@@ -26,28 +26,29 @@ export function setupGigEvaluation(recentGigs = []) {
     }
 
     function updateEvaluation() {
+        const gigMiles = parseFloat(document.getElementById("gigMiles")?.value) || 0;
+        const shiftMiles = parseFloat(document.getElementById("totalMiles")?.value) || 0;
+
+        // Update the gig object
+        newGig.gigMiles = gigMiles;
+        newGig.shiftMiles = shiftMiles;
+
+        // Compare efficiency: how much mileage was actually paid for
         const verdict = compareToHistory(newGig, recentGigs);
         const output = document.getElementById("gigEvaluation");
+
         if (output) {
             output.textContent =
-                `Paid Miles: ${verdict.currentRate} vs Hist Avg: ${verdict.historyRate} → ${verdict.thumbs}`;
+                `Efficiency: ${verdict.currentRate} paid mi / ${verdict.historyRate} avg → ${verdict.thumbs}`;
         }
     }
 
     // 🔁 Attach listeners to form inputs
     const paidMilesInput = document.getElementById("paidMiles");
-    const approachMilesInput = document.getElementById("approachMiles");
 
     if (paidMilesInput) {
         paidMilesInput.addEventListener("input", (e) => {
             newGig.paidMiles = parseFloat(e.target.value) || 0;
-            updateEvaluation();
-        });
-    }
-
-    if (approachMilesInput) {
-        approachMilesInput.addEventListener("input", (e) => {
-            newGig.approachMiles = parseFloat(e.target.value) || 0;
             updateEvaluation();
         });
     }
