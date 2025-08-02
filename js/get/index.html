@@ -35,24 +35,37 @@
 </head>
 <body>
     <h1>Shift Logger</h1>
+    <section>
+        <form id="Shift">
+            <label for="providerInput">Provider:</label>
+            <input type="text" id="providerInput">
 
-    <label for="providerInput">Provider:</label>
-    <input type="text" id="providerInput">
+            <label for="shiftDate">Shift Date:</label>
+            <input type="date" id="shiftDate">
 
-    <label for="shiftDate">Shift Date:</label>
-    <input type="date" id="shiftDate">
+            <label for="odometerStart">Odometer Start</label>
+            <input type="number" id="odometerStart" />
 
-    <label for="amountPaid">Amount Paid by Provider ($):</label>
-    <input type="number" id="amountPaid" step="0.01">
+            <label for="odometerEnd">Odometer End</label>
+            <input type="number" id="odometerEnd" />
+        </form>
+    </section>
+    <section>
+        <form id="gigDetails">
 
-    <label for="tipAmount">Tip ($):</label>
-    <input type="number" id="tipAmount" step="0.01">
+            <label for="amountPaid">Amount Paid by Provider ($):</label>
+            <input type="number" id="amountPaid" step="0.01">
 
-    <label for="paidMiles">Paid Miles:</label>
-    <input type="number" id="paidMiles" step="0.1">
+            <label for="tipAmount">Tip ($):</label>
+            <input type="number" id="tipAmount" step="0.01">
 
-    <label for="gigDetails">Gig Notes:</label>
-    <textarea id="gigDetails" placeholder="Optional notes..."></textarea>
+            <label for="paidMiles">Paid Miles:</label>
+            <input type="number" id="paidMiles" step="0.1">
+
+            <label for="gigNotes">Gig Notes:</label>
+            <textarea id="gigNotes" placeholder="Optional notes..."></textarea>
+        </form>
+    </section>
 
     <button id="saveShift">Save Shift</button>
 
