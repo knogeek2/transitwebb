@@ -1,0 +1,263 @@
+﻿/* ------------------------------
+   Base Reset and Typography
+   ------------------------------ */
+
+/* Remove default margin and set base font styles */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    background-color: #f9f9f9; /* Light background for readability */
+    color: #333; /* Neutral text color */
+    padding: 12px; /* Padding for mobile spacing */
+}
+
+/* Container for overall layout */
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 12px;
+}
+
+/* ------------------------------
+   Tab Navigation
+   ------------------------------ */
+
+/* Stack tabs vertically on mobile */
+.tab-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+/* Individual tab styling */
+.tab {
+    background-color: #0078d4; /* Microsoft blue */
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 1rem;
+    width: 100%; /* Full width on mobile */
+    cursor: pointer;
+}
+
+    /* Active tab variant */
+    .tab.active {
+        background-color: #005a9e; /* Darker blue for active state */
+    }
+
+/* ------------------------------
+   Form Layout
+   ------------------------------ */
+
+/* Stack form fields vertically on mobile */
+.form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Space between fields */
+}
+
+/* ------------------------------
+   Input Fields
+   ------------------------------ */
+
+/* Style all common input types */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+    width: 100%; /* Full width for mobile usability */
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+}
+
+/* ------------------------------
+   Button Row
+   ------------------------------ */
+
+/* Stack buttons vertically on mobile */
+.button-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+/* General button styling */
+button {
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #00a651; /* Green for action */
+    color: white;
+    cursor: pointer;
+    width: 100%; /* Full width on mobile */
+}
+
+    /* Hover effect for buttons */
+    button:hover {
+        background-color: #008c45; /* Slightly darker green */
+    }
+
+/* ------------------------------
+   Notification Banner
+   ------------------------------ */
+
+/* Fixed notification for shift confirmation or alerts */
+#shiftNotification {
+    position: fixed;
+    bottom: 20px;
+    left: 10px;
+    right: 10px;
+    background-color: #00a651;
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 1rem;
+    z-index: 1000; /* Ensure it appears above other elements */
+    display: none; /* Hidden by default */
+}
+
+/* ------------------------------
+   Responsive Enhancements
+   ------------------------------ */
+
+/* Apply layout changes for screens wider than 600px */
+@media (min-width: 600px) {
+
+    /* Tabs become horizontal */
+    .tab-container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    /* Tabs shrink to fit and share space */
+    .tab {
+        width: auto;
+        flex: 1;
+    }
+
+    /* Form switches to grid layout */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr; /* Label and input ratio */
+        gap: 16px;
+    }
+
+    /* Buttons align horizontally */
+    .button-row {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    /* Buttons shrink to fit */
+    button {
+        width: auto;
+        flex: 1;
+    }
+}
+
+/* ------------------------------------
+   Best effort at forcing portrait mode
+   ------------------------------------ */
+@media screen and (orientation: landscape) {
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #111;
+        color: #fff;
+        font-size: 1.2rem;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .container {
+        display: none; /* Hide main UI */
+    }
+
+    body::before {
+        content: "Please rotate your device to portrait mode.";
+    }
+}
+/* ------------------------------
+   Gig Entry Styling
+   ------------------------------ */
+.gig-entry {
+    border: 2px solid #ccc; /* light gray border */
+    border-radius: 8px;
+    padding: 16px;
+    margin: 20px auto;
+    max-width: 800px;
+    background-color: #ffffff; /* white background for clarity */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* subtle depth */
+}
+.gig-entry h2 {
+    background-color: #00a651;
+    color: white;
+    padding: 8px;
+    border-radius: 6px 6px 0 0;
+    margin: -16px -16px 16px -16px;
+}
+.gig-entry p {
+    margin: 8px 0;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+/* ------------------------------
+   Gig Notes Section
+   ------------------------------ */
+#gigNotes {
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    box-sizing: border-box;
+    padding: 8px;
+    font-size: 1rem;
+}
+
+/* Container for the entire shift block */
+.shift-wrapper {
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin-bottom: 24px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Metrics block between shift form and gig log */
+.shift-metrics {
+    background-color: #eef6ff;
+    border-left: 4px solid #3399ff;
+    padding: 12px 16px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+    .shift-metrics p {
+        margin: 6px 0;
+    }
+
+    /* Optional: verdict styling */
+    .shift-metrics strong {
+        display: block;
+        margin-top: 8px;
+        font-weight: bold;
+        color: #333;
+    }

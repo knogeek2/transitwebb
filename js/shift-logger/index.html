@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!--Internal styles. -->
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <title>Shift Logger</title>
+</head>
+<body>
+    <h2>Shift Logger</h2>
+
+    <section id="shiftSection">
+        <div class="shift-wrapper">
+            <form id="shiftForm">
+                <label for="odometerStart">Odometer Start</label>
+                <input type="number" id="odometerStart" />
+                <label for="providerInput">Provider:</label>
+                <input type="text" id="providerInput">
+
+                <label for="shiftDate">Shift Date:</label>
+                <input type="date" id="shiftDate">
+
+                <label for="odometerEnd">Odometer End</label>
+                <input type="number" id="odometerEnd" />
+
+                <label for="totalMiles">Total Miles Driven</label>
+                <input type="number" id="totalMiles" class="readonly" readonly />
+            </form>
+        </div>
+        <button id="saveShift">Save Shift</button>
+
+        <div id="shiftNotification" style="display:none; color:green; margin-top:10px;"></div>
+
+        <!-- Shift Metrics Block -->
+        <div id="shiftMetrics" class="shift-metrics" style="margin-top:20px;">
+            <!-- Populated dynamically -->
+        </div>
+    </section>
+
+
+    <section id="gigSection">
+        <div class="gig-entry">
+            <h3>Log Gig</h3>
+            <form id="gigForm">
+
+                <label for="gigID">Gig ID:</label>
+                <input type="text" id="gigID" placeholder="Enter Gig/Support ID if available">
+
+                <label for="amountPaid">Earnings ($):</label>
+                <input type="number" id="amountPaid" step="0.01">
+
+                <label for="tipAmount">Tip ($):</label>
+                <input type="number" id="tipAmount" step="0.01">
+
+                <label for="paidMiles">Paid Miles:</label>
+                <input type="number" id="paidMiles" step="0.1">
+
+                <br />
+
+                <label for="gigNotes">Gig Notes:</label>
+                <textarea id="gigNotes" name="gigNotes" placeholder="Optional notes..."></textarea>
+            </form>
+            <button id="saveGig">Save Gig</button>
+        </div>
+    </section>
+
+    <div class="log" id="shiftLog"></div>
+
+    <script>
+        // DOM references
+        const providerInput = document.getElementById("providerInput");
+        const shiftDate = document.getElementById("shiftDate");
+        const odometerStart = document.getElementById("odometerStart");
+        const odometerEnd = document.getElementById("odometerEnd");
+        const totalMiles = document.getElementById("totalMiles");
+        const amountPaid = document.getElementById("amountPaid");
+        const tipAmount = document.getElementById("tipAmount");
+        const paidMiles = document.getElementById("paidMiles");
+        const gigNotes = document.getElementById("gigNotes");
+        const shiftLog = document.getElementById("shiftLog");
+        const saveGig = document.getElementById("saveGig");
+        const saveShift = document.getElementById("saveShift");
+        const shiftNotification = document.getElementById("shiftNotification");
+
+        // Auto-fill today's date in shiftDate if not already set
+        if (!shiftDate.value) {
+            shiftDate.value = new Date().toISOString().split("T")[0];
+        }
+
+        let shiftStart = null;
+        let shiftTotal = 0;
+
+        // Auto-fill last provider if available
+        const lastProvider = localStorage.getItem("lastProvider");
+        if (lastProvider) providerInput.value = lastProvider;
+
+        // Calculate total miles when odometer values change
+        function updateTotalMiles() {
+            const start = parseFloat(odometerStart.value);
+            const end = parseFloat(odometerEnd.value);
+
+            if (!isNaN(start) && !isNaN(end) && end >= start) {
+                totalMiles.value = (end - start).toFixed(1);
+            } else {
+                totalMiles.value = "";
+            }
+        }
+
+        odometerStart.addEventListener("input", updateTotalMiles);
+
+        odometerEnd.addEventListener("input", () => {
+            updateTotalMiles();
+
+            // Only proceed if shift has started
+            if (!shiftStart) return;
+
+            const start = parseFloat(odometerStart.value);
+            const end = parseFloat(odometerEnd.value);
+
+            // Validate odometer values
+            if (isNaN(start) || isNaN(end) || end < start) return;
+
+            // Prompt to close shift
+            const confirmClose = confirm("Odometer end entered. Would you like to close out this shift and view the summary?");
+            if (confirmClose) {
+                displayShiftSummary();
+            }
+        });
+
+        saveShift.addEventListener("click", () => {
+            const provider = providerInput.value.trim();
+            const odoStartVal = odometerStart.value;
+
+            if (!provider) {
+                alert("Provider is required to start shift.");
+                return;
+            }
+            if (!odoStartVal) {
+                alert("Odometer Start is required to begin shift.");
+                return;
+            }
+
+            shiftStart = new Date();
+            shiftDate.value = shiftStart.toISOString().split("T")[0];
+            localStorage.setItem("lastProvider", provider);
+
+            showNotification("💼 Shift started. Make DAT MONAY! 💸");
+        });
+
+        saveGig.addEventListener("click", () => {
+            if (!shiftStart) {
+                alert("Please start a shift before logging gigs.");
+                return;
+            }
+
+            const provider = providerInput.value.trim();
+            const date = shiftDate.value;
+            const paid = parseFloat(amountPaid.value);
+            const tip = parseFloat(tipAmount.value);
+            const miles = parseFloat(paidMiles.value);
+            const notes = gigNotes.value.trim();
+            const gigIDInput = document.getElementById("gigID");
+            let gigID = gigIDInput ? gigIDInput.value.trim() : "";
+
+            if (!provider || !date || isNaN(paid) || isNaN(tip) || isNaN(miles)) {
+                alert("Please fill out all required fields with valid numbers.");
+                return;
+            }
+
+            if (provider.toLowerCase() === "roadie" && !gigID) {
+                alert("Support ID is required for Roadie gigs.");
+                return;
+            }
+
+            if (!gigID) {
+                gigID = `${provider}_${Date.now()}`;
+            }
+
+            shiftTotal += paid + tip;
+            const gigTime = new Date().toLocaleTimeString();
+
+            const entryDiv = document.createElement("div");
+            entryDiv.innerHTML = `
+                <strong>${date}</strong> - ${provider} (${gigID})<br>
+                Paid: $${paid.toFixed(2)} | Tip: $${tip.toFixed(2)} | Miles: ${miles.toFixed(1)} |
+                <span style="color: green;"><strong>Shift Total:</strong> $${shiftTotal.toFixed(2)}</span><br>
+                <em>${notes}</em><br>
+                <small>Logged at ${gigTime}</small>
+            `;
+            shiftLog.prepend(entryDiv);
+
+            showNotification(`✅ Gig saved. Shift total: $${shiftTotal.toFixed(2)}`);
+
+            amountPaid.value = "";
+            tipAmount.value = "";
+            paidMiles.value = "";
+            gigNotes.value = "";
+            if (gigIDInput) gigIDInput.value = "";
+        });
+
+        function showNotification(message) {
+            shiftNotification.textContent = message;
+            shiftNotification.style.display = "block";
+        }
+
+        function displayShiftSummary() {
+            const odoStartVal = parseFloat(odometerStart.value);
+            const odoEndVal = parseFloat(odometerEnd.value);
+            const totalMilesVal = odoEndVal - odoStartVal;
+
+            const summaryDiv = document.createElement("div");
+            summaryDiv.innerHTML = `
+                <h3>📋 Shift Summary for ${shiftDate.value}</h3>
+                <p><strong>Total Miles:</strong> ${totalMilesVal.toFixed(1)}</p>
+                <p><strong>Total Earnings:</strong> $${shiftTotal.toFixed(2)}</p>
+                <p><strong>Gigs Logged:</strong> ${shiftLog.children.length}</p>
+                <p style="color: darkred;"><em>Shift closed. No further edits allowed.</em></p>
+            `;
+            shiftLog.prepend(summaryDiv);
+
+            odometerStart.disabled = true;
+            odometerEnd.disabled = true;
+            saveGig.disabled = true;
+            saveShift.disabled = true;
+
+            showNotification("📋 Shift closed and summary displayed.");
+        }
+    </script>
+</body>
+</html>
